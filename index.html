@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>PAVEL MEDIA | Премиум журнал — все развороты загружены</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      user-select: none;
+    }
+
+    body {
+      background: radial-gradient(circle at 30% 10%, #0a1122, #02050c);
+      min-height: 100vh;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Playfair Display', 'Didot', 'Georgia', 'Times New Roman', serif;
+      padding: 20px;
+    }
+
+    .magazine-container {
+      width: 100%;
+      height: 98vh;
+      max-height: 98vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .flipbook {
+      position: relative;
+      width: auto;
+      height: auto;
+      flex: 1 1 auto;
+      min-height: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .book-viewport {
+      position: relative;
+      background: #07112b;
+      border-radius: 24px;
+      box-shadow: 0 35px 60px -20px rgba(0,0,0,0.8), 0 0 0 1px rgba(80, 140, 210, 0.3);
+      overflow: hidden;
+      transition: all 0.2s;
+    }
+
+    .pages-wrapper {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    .double-spread {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center center;
+      background-repeat: no-repeat;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: transform 0.55s cubic-bezier(0.2, 0.95, 0.4, 1.05);
+      backface-visibility: hidden;
+      box-shadow: -3px 0 12px rgba(0,0,0,0.3), 1px 0 5px rgba(255,255,255,0.05);
+    }
+
+    .single-page {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: transform 0.55s cubic-bezier(0.2, 0.95, 0.4, 1.05);
+      backface-visibility: hidden;
+      box-shadow: -3px 0 12px rgba(0,0,0,0.3), 1px 0 5px rgba(255,255,255,0.05);
+    }
+
+    /* Рекламный разворот */
+    .ad-spread {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      cursor: pointer;
+      border-radius: 20px;
+      overflow: hidden;
+      transition: transform 0.55s cubic-bezier(0.2, 0.95, 0.4, 1.05);
+      backface-visibility: hidden;
+      box-shadow: -3px 0 12px rgba(0,0,0,0.3), 1px 0 5px rgba(255,255,255,0.05);
+    }
+
+    .ad-left {
+      width: 50%;
+      height: 100%;
+      background: radial-gradient(ellipse at 30% 25%, #0b1f3e, #010614);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      font-family: 'Playfair Display', 'Didot', serif;
+      padding: 2rem;
+      box-sizing: border-box;
+      position: relative;
+    }
+
+    .ad-left::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(125deg, rgba(210,180,140,0.08) 0%, rgba(0,0,0,0) 65%);
+      pointer-events: none;
+    }
+
+    .ad-right {
+      width: 50%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    .playboy-gold {
+      font-size: 3.8rem;
+      font-weight: 700;
+      letter-spacing: 8px;
+      background: linear-gradient(135deg, #f5e6c4, #caa86b);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin: 0.5rem 0;
+    }
+
+    .luxe-sub {
+      font-size: 1rem;
+      letter-spacing: 4px;
+      color: #bdd1f5;
+      border-top: 1px solid #5e7ea3;
+      border-bottom: 1px solid #5e7ea3;
+      display: inline-block;
+      padding: 0.4rem 1rem;
+      margin: 1rem 0;
+    }
+
+    .ad-luxe-description {
+      max-width: 85%;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      color: #c7dbfc;
+      margin-top: 1rem;
+    }
+
+    .gold-edition {
+      margin-top: 22px;
+      font-size: 0.7rem;
+      letter-spacing: 4px;
+      color: #b59863;
+    }
+
+    .luxe-divider {
+      margin-top: 14px;
+      width: 60px;
+      height: 2px;
+      background: #7f9fcf;
+    }
+
+    .double-spread.flipping-forward, .single-page.flipping-forward, .ad-spread.flipping-forward {
+      transform: rotateY(-155deg);
+      transition: transform 0.52s cubic-bezier(0.23, 1, 0.32, 1);
+      z-index: 30;
+    }
+
+    .double-spread.flipping-back, .single-page.flipping-back, .ad-spread.flipping-back {
+      transform: rotateY(155deg);
+      transition: transform 0.52s cubic-bezier(0.23, 1, 0.32, 1);
+      z-index: 30;
+    }
+
+    .controls {
+      display: flex;
+      gap: 1.8rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      padding: 0.3rem 0;
+    }
+
+    .ctrl-btn {
+      background: rgba(8, 20, 48, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid #3a608b;
+      font-size: 0.9rem;
+      font-weight: 500;
+      padding: 0.6rem 1.8rem;
+      border-radius: 60px;
+      font-family: 'Segoe UI', 'Playfair Display', serif;
+      letter-spacing: 2px;
+      cursor: pointer;
+      transition: all 0.25s;
+      color: #eef3ff;
+      text-transform: uppercase;
+      box-shadow: 0 6px 14px rgba(0,0,0,0.4);
+    }
+
+    .ctrl-btn:hover {
+      background: #1f4070;
+      border-color: #9bc0f0;
+      transform: scale(0.96);
+    }
+
+    .page-indicator {
+      font-family: 'Courier New', monospace;
+      font-size: 0.85rem;
+      background: #0a1b36cc;
+      backdrop-filter: blur(12px);
+      padding: 0.55rem 1.8rem;
+      border-radius: 50px;
+      color: #cde2ff;
+      letter-spacing: 1.5px;
+      border: 1px solid #2d5a8c;
+      font-weight: 600;
+    }
+
+    @media (max-width: 1300px) {
+      body { padding: 12px; }
+      .ctrl-btn { padding: 0.5rem 1.2rem; font-size: 0.8rem; }
+      .page-indicator { font-size: 0.75rem; padding: 0.45rem 1.2rem; }
+    }
+
+    @media (max-width: 800px) {
+      .controls { gap: 1rem; }
+      .ctrl-btn { padding: 0.4rem 1rem; font-size: 0.7rem; letter-spacing: 1px; }
+      .page-indicator { font-size: 0.65rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="magazine-container">
+  <div class="flipbook" id="flipbook">
+    <div class="book-viewport" id="bookViewport">
+      <div class="pages-wrapper" id="pagesWrapper"></div>
+    </div>
+  </div>
+  <div class="controls">
+    <button class="ctrl-btn" id="prevBtn">◀ ПРЕДЫДУЩИЙ</button>
+    <span class="page-indicator" id="pageIndicator">РАЗВОРОТ 1 / 26</span>
+    <button class="ctrl-btn" id="nextBtn">СЛЕДУЮЩИЙ ▶</button>
+  </div>
+</div>
+
+<script>
+  // =================================================================
+  //  ВСЕ 26 РАЗВОРОТОВ ЗАДАНЫ ВРУЧНУЮ — ГАРАНТИРОВАННО БЕЗ ПРОПУСКОВ
+  // =================================================================
+
+  const spreadsData = [
+    // 1. Обложка (одиночная, 595x842)
+    { type: "single", src: "scans/Титульный лист-последний лист.png", aspectWidth: 595, aspectHeight: 842 },
+    
+    // 2. Рекламный разворот (текст + playboy.png)
+    { 
+      type: "ad-spread", 
+      leftHtml: `
+        <div class="ad-left">
+          <div class="playboy-gold">PLAYBOY</div>
+          <div class="luxe-sub">THE LUXE ARCHIVE</div>
+          <div class="ad-luxe-description">
+            Эксклюзивный выпуск от издательства <strong>PAVEL MEDIA</strong>.<br>
+            Икона стиля, арт-проекты и гламурная классика.<br>
+            Вдохновение для истинных ценителей.
+          </div>
+          <div class="gold-edition">— LIMITED GOLD EDITION —</div>
+          <div class="luxe-divider"></div>
+        </div>
+      `,
+      rightSrc: "scans/playboy.png",
+      aspectWidth: 1190,
+      aspectHeight: 842
+    },
+    
+    // 3–26. Целые развороты (1190x842)
+    { type: "double", src: "scans/разворот 0.png", aspectWidth: 1190, aspectHeight: 842 },
+    { type: "double", src: "scans/разворот 1.png", aspectWidth: 1190, aspectHeight: 842 },
+    { type: "double", src: "scans/разворот 2.png", aspectWidth: 1190, aspectHeight: 842 },
+    { type: "double", src: "scans/разворот 3.png", aspectWidth: 1190, aspectHeight: 842 },
+    { type: "double", src: "scans/разворот 4.png", aspectWidth: 1190, aspectHeight: 842 },
+    { type: "double", src: "scans/разворот 5.png", aspectWidth: 1190, aspectHeight: 842 },
+    { type: "double", src: "scans/разворот 6.png", aspectWidth: 1190, aspectHeight: 842 },
+    { type: "double", src: "scans/разворот 7.png", aspectWidth: 1190, aspectHeight: 842 },
+    { type: "double", src: "scans/разворот 8.png", aspectWidth: 1190, aspectHeight: 842 },
+    { type: "double", src: "scans/разворот 9.png", aspectWidth: 1190, aspectHeight: 842 },
+    { type: "double", src: "scans/разворот 10.png", aspectWidth: 1190, aspectHeight: 842 },
+    { type: "double", src: "scans/разворот 11.png", aspectWidth: 1190, aspectHeight: 842 },
+    { type: "double", src: "scans/разворот 12.png", aspectWidth: 1190, aspectHeight: 842 },
+    { type: "double", src: "scans/разворот 13.png", aspectWidth: 1190, aspectHeight: 842 },
+    { type: "double", src: "scans/разворот 14.png", aspectWidth: 1190, aspectHeight: 842 },
+    { type: "double", src: "scans/разворот 15.png", aspectWidth: 1190, aspectHeight: 842 },
+    { type: "double", src: "scans/разворот 16.png", aspectWidth: 1190, aspectHeight: 842 },
+    { type: "double", src: "scans/разворот 17.png", aspectWidth: 1190, aspectHeight: 842 },
+    { type: "double", src: "scans/разворот 18.png", aspectWidth: 1190, aspectHeight: 842 },
+    { type: "double", src: "scans/разворот 19.png", aspectWidth: 1190, aspectHeight: 842 },
+    { type: "double", src: "scans/разворот 20.png", aspectWidth: 1190, aspectHeight: 842 },
+    { type: "double", src: "scans/разворот 21.png", aspectWidth: 1190, aspectHeight: 842 },
+    { type: "double", src: "scans/разворот последний.png", aspectWidth: 1190, aspectHeight: 842 },
+    
+    // 26. Задняя обложка (одиночная, 595x842)
+    { type: "single", src: "scans/последний лист.png", aspectWidth: 595, aspectHeight: 842 }
+  ];
+
+  const totalSpreads = spreadsData.length; // = 26
+  let currentSpreadIdx = 0;
+  let isAnimating = false;
+
+  // DOM элементы
+  const bookViewport = document.getElementById('bookViewport');
+  const wrapper = document.getElementById('pagesWrapper');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const indicatorSpan = document.getElementById('pageIndicator');
+
+  let currentElement = null;
+
+  function updateViewportSize() {
+    if (!bookViewport) return;
+    const spread = spreadsData[currentSpreadIdx];
+    const targetWidth = spread.aspectWidth;
+    const targetHeight = spread.aspectHeight;
+    const flipbookRect = document.getElementById('flipbook').getBoundingClientRect();
+    const maxHeight = flipbookRect.height - 4;
+    const maxWidth = window.innerWidth - 60;
+    let scale = maxHeight / targetHeight;
+    const neededWidth = targetWidth * scale;
+    if (neededWidth > maxWidth) scale = maxWidth / targetWidth;
+    bookViewport.style.width = `${targetWidth * scale}px`;
+    bookViewport.style.height = `${targetHeight * scale}px`;
+  }
+
+  function renderCurrent() {
+    if (!wrapper) return;
+    wrapper.innerHTML = '';
+    const spread = spreadsData[currentSpreadIdx];
+    let div;
+
+    if (spread.type === 'single') {
+      div = document.createElement('div');
+      div.className = 'single-page';
+      div.style.backgroundImage = `url('${spread.src}')`;
+      div.style.backgroundColor = '#07152b';
+      div.style.backgroundSize = 'cover';
+      div.style.backgroundPosition = 'center';
+    } 
+    else if (spread.type === 'double') {
+      div = document.createElement('div');
+      div.className = 'double-spread';
+      div.style.backgroundImage = `url('${spread.src}')`;
+      div.style.backgroundColor = '#07152b';
+      div.style.backgroundSize = 'cover';
+      div.style.backgroundPosition = 'center';
+    }
+    else if (spread.type === 'ad-spread') {
+      div = document.createElement('div');
+      div.className = 'ad-spread';
+      
+      const leftDiv = document.createElement('div');
+      leftDiv.innerHTML = spread.leftHtml;
+      const leftContent = leftDiv.firstElementChild;
+      
+      const rightDiv = document.createElement('div');
+      rightDiv.className = 'ad-right';
+      rightDiv.style.backgroundImage = `url('${spread.rightSrc}')`;
+      rightDiv.style.backgroundSize = 'cover';
+      rightDiv.style.backgroundPosition = 'center';
+      
+      div.appendChild(leftContent);
+      div.appendChild(rightDiv);
+    }
+
+    wrapper.appendChild(div);
+    currentElement = div;
+
+    const onPageClick = (e) => {
+      e.stopPropagation();
+      if (isAnimating) return;
+      const rect = div.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const isLeftHalf = clickX < rect.width / 2;
+      if (isLeftHalf && currentSpreadIdx > 0) flipToPrev();
+      else if (!isLeftHalf && currentSpreadIdx < totalSpreads - 1) flipToNext();
+    };
+
+    div.removeEventListener('click', onPageClick);
+    div.addEventListener('click', onPageClick);
+
+    updateViewportSize();
+    updateIndicator();
+  }
+
+  function updateIndicator() {
+    indicatorSpan.innerText = `РАЗВОРОТ ${currentSpreadIdx + 1} / ${totalSpreads}`;
+  }
+
+  function flipToNext() {
+    if (isAnimating) return;
+    const nextIdx = currentSpreadIdx + 1;
+    if (nextIdx >= totalSpreads) return;
+    isAnimating = true;
+    if (!currentElement) { isAnimating = false; return; }
+    currentElement.classList.add('flipping-forward');
+    const onFinish = () => {
+      currentElement.classList.remove('flipping-forward');
+      currentSpreadIdx = nextIdx;
+      renderCurrent();
+      isAnimating = false;
+      currentElement.removeEventListener('transitionend', onFinish);
+    };
+    currentElement.addEventListener('transitionend', onFinish, { once: true });
+    setTimeout(() => {
+      if (isAnimating) {
+        currentElement.classList.remove('flipping-forward');
+        currentSpreadIdx = nextIdx;
+        renderCurrent();
+        isAnimating = false;
+      }
+    }, 580);
+  }
+
+  function flipToPrev() {
+    if (isAnimating) return;
+    const prevIdx = currentSpreadIdx - 1;
+    if (prevIdx < 0) return;
+    isAnimating = true;
+    if (!currentElement) { isAnimating = false; return; }
+    currentElement.classList.add('flipping-back');
+    const onFinish = () => {
+      currentElement.classList.remove('flipping-back');
+      currentSpreadIdx = prevIdx;
+      renderCurrent();
+      isAnimating = false;
+      currentElement.removeEventListener('transitionend', onFinish);
+    };
+    currentElement.addEventListener('transitionend', onFinish, { once: true });
+    setTimeout(() => {
+      if (isAnimating) {
+        currentElement.classList.remove('flipping-back');
+        currentSpreadIdx = prevIdx;
+        renderCurrent();
+        isAnimating = false;
+      }
+    }, 580);
+  }
+
+  function nextHandler() { if (!isAnimating && currentSpreadIdx < totalSpreads - 1) flipToNext(); }
+  function prevHandler() { if (!isAnimating && currentSpreadIdx > 0) flipToPrev(); }
+
+  prevBtn.addEventListener('click', prevHandler);
+  nextBtn.addEventListener('click', nextHandler);
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') { e.preventDefault(); prevHandler(); }
+    else if (e.key === 'ArrowRight') { e.preventDefault(); nextHandler(); }
+  });
+  window.addEventListener('resize', () => updateViewportSize());
+
+  renderCurrent();
+
+  console.log('✨ ЖУРНАЛ ЗАГРУЖЕН (РУЧНОЕ ЗАДАНИЕ — 100% БЕЗ ПРОПУСКОВ) ✨');
+  console.log('📖 Все 26 разворотов перечислены явно, теперь всё работает');
+</script>
+</body>
+</html>
