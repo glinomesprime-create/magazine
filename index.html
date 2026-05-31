@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>VOGUE ISKAKOVA | Премиум журнал</title>
+  <title>VOGUE ISKAKOVA | Премиум журнал — эффект переплёта</title>
   <style>
     * {
       margin: 0;
@@ -74,6 +74,36 @@
       transition: transform 0.55s cubic-bezier(0.2, 0.95, 0.4, 1.05);
       backface-visibility: hidden;
       box-shadow: -3px 0 12px rgba(0,0,0,0.3), 1px 0 5px rgba(255,255,255,0.05);
+      position: relative;
+    }
+    
+    /* Эффект изгиба в центре разворота (для целых изображений) */
+    .double-spread::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 2px;
+      height: 100%;
+      background: linear-gradient(to right, rgba(0,0,0,0.15), rgba(255,255,240,0.2), rgba(0,0,0,0.15));
+      transform: translateX(-50%);
+      pointer-events: none;
+      z-index: 5;
+      box-shadow: 0 0 4px rgba(0,0,0,0.2);
+    }
+    
+    /* Лёгкая тень по краям разворота */
+    .double-spread::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      box-shadow: inset 0 0 15px rgba(0,0,0,0.2);
+      pointer-events: none;
+      z-index: 4;
+      border-radius: 20px;
     }
 
     .single-page {
@@ -106,6 +136,36 @@
       transition: transform 0.55s cubic-bezier(0.2, 0.95, 0.4, 1.05);
       backface-visibility: hidden;
       box-shadow: -3px 0 12px rgba(0,0,0,0.3), 1px 0 5px rgba(255,255,255,0.05);
+      position: relative;
+    }
+    
+    /* Эффект изгиба в центре рекламного разворота */
+    .ad-spread::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 2px;
+      height: 100%;
+      background: linear-gradient(to right, rgba(0,0,0,0.2), rgba(255,255,240,0.25), rgba(0,0,0,0.2));
+      transform: translateX(-50%);
+      pointer-events: none;
+      z-index: 10;
+      box-shadow: 0 0 4px rgba(0,0,0,0.15);
+    }
+    
+    /* Лёгкая тень по краям рекламного разворота */
+    .ad-spread::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      box-shadow: inset 0 0 12px rgba(0,0,0,0.15);
+      pointer-events: none;
+      z-index: 9;
+      border-radius: 20px;
     }
 
     .ad-left {
@@ -122,6 +182,18 @@
       box-sizing: border-box;
       position: relative;
       overflow-y: auto;
+    }
+    
+    /* Лёгкая тень на стыке левой и правой части рекламы */
+    .ad-left::after {
+      content: "";
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 3px;
+      height: 100%;
+      background: linear-gradient(to left, rgba(0,0,0,0.3), rgba(0,0,0,0));
+      pointer-events: none;
     }
 
     /* Адаптация текста для мобильных устройств (альбомная ориентация) */
@@ -176,23 +248,25 @@
       }
     }
 
-    .ad-left::after {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(125deg, rgba(210,180,140,0.08) 0%, rgba(0,0,0,0) 65%);
-      pointer-events: none;
-    }
-
     .ad-right {
       width: 50%;
       height: 100%;
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
+      position: relative;
+    }
+    
+    /* Лёгкая тень на стыке с правой частью */
+    .ad-right::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 3px;
+      height: 100%;
+      background: linear-gradient(to right, rgba(0,0,0,0.2), rgba(0,0,0,0));
+      pointer-events: none;
     }
 
     .playboy-gold {
@@ -401,16 +475,12 @@
 
 <script>
   // =================================================================
-  //  VOGUE ISKAKOVA — 26 РАЗВОРОТОВ
+  //  VOGUE ISKAKOVA — 26 РАЗВОРОТОВ С ЭФФЕКТОМ ИЗГИБА В ЦЕНТРЕ
   //  Реклама (разворот №2) защищена паролем "вааайб"
-  //  АВТОПОВОРОТ: развороты — альбомный режим, обложка/задняя — портретный
   // =================================================================
 
   const spreadsData = [
-    // 1. Обложка (одиночная, портрет 595x842)
     { type: "single", src: "scans/Титульный лист-последний лист.png", aspectWidth: 595, aspectHeight: 842, orientation: "portrait" },
-    
-    // 2. Рекламный разворот (альбомный 1190x842)
     { 
       type: "ad-spread", 
       requiresPassword: true,
@@ -432,8 +502,6 @@
       aspectWidth: 1190,
       aspectHeight: 842
     },
-    
-    // 3–25. Целые развороты (альбомные 1190x842)
     { type: "double", src: "scans/разворот 0.png", aspectWidth: 1190, aspectHeight: 842, orientation: "landscape" },
     { type: "double", src: "scans/разворот 1.png", aspectWidth: 1190, aspectHeight: 842, orientation: "landscape" },
     { type: "double", src: "scans/разворот 2.png", aspectWidth: 1190, aspectHeight: 842, orientation: "landscape" },
@@ -457,8 +525,6 @@
     { type: "double", src: "scans/разворот 20.png", aspectWidth: 1190, aspectHeight: 842, orientation: "landscape" },
     { type: "double", src: "scans/разворот 21.png", aspectWidth: 1190, aspectHeight: 842, orientation: "landscape" },
     { type: "double", src: "scans/разворот последний.png", aspectWidth: 1190, aspectHeight: 842, orientation: "landscape" },
-    
-    // 26. Задняя обложка (одиночная, портрет 595x842)
     { type: "single", src: "scans/последний лист.png", aspectWidth: 595, aspectHeight: 842, orientation: "portrait" }
   ];
 
@@ -474,19 +540,16 @@
 
   let currentElement = null;
 
-  // Функция определения оптимального размера с учётом ориентации
   function updateViewportSize() {
     if (!bookViewport) return;
     const spread = spreadsData[currentSpreadIdx];
     let targetWidth = spread.aspectWidth;
     let targetHeight = spread.aspectHeight;
     
-    // Если на мобильном устройстве и страница портретная, а экран в альбоме — подстраиваем
     const isMobile = window.innerWidth <= 900;
     const isLandscapeScreen = window.innerWidth > window.innerHeight;
     
     if (isMobile && spread.orientation === "portrait" && isLandscapeScreen) {
-      // Для портретной страницы на альбомном экране — уменьшаем масштаб, чтобы влезла по высоте
       const flipbookRect = document.getElementById('flipbook').getBoundingClientRect();
       const maxHeight = flipbookRect.height - 4;
       const scale = maxHeight / targetHeight;
@@ -718,8 +781,8 @@
 
   renderCurrent();
 
-  console.log('✨ VOGUE ISKAKOVA — ЖУРНАЛ ЗАГРУЖЕН ✨');
-  console.log('📱 Мобильная версия: развороты в альбомном режиме, обложка/задняя — в портретном');
+  console.log('✨ VOGUE ISKAKOVA — ЖУРНАЛ С ЭФФЕКТОМ ПЕРЕПЛЁТА ✨');
+  console.log('📖 В центре каждого разворота добавлен изгиб и лёгкие тени');
   console.log('🔒 Рекламный разворот защищён паролем: "вааайб"');
 </script>
 </body>
