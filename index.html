@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>PAVEL MEDIA | Премиум журнал — все развороты загружены</title>
+  <title>VOGUE ISKAKOVA | Премиум журнал — эксклюзивное издание</title>
   <style>
     * {
       margin: 0;
@@ -118,9 +118,54 @@
       align-items: center;
       text-align: center;
       font-family: 'Playfair Display', 'Didot', serif;
-      padding: 2rem;
+      padding: 1.5rem;
       box-sizing: border-box;
       position: relative;
+      overflow-y: auto;
+    }
+
+    /* Адаптация текста для мобильных устройств */
+    @media (max-width: 800px) {
+      .ad-left {
+        padding: 1rem;
+      }
+      .playboy-gold {
+        font-size: 2.2rem;
+        letter-spacing: 4px;
+      }
+      .luxe-sub {
+        font-size: 0.7rem;
+        letter-spacing: 2px;
+        padding: 0.2rem 0.6rem;
+      }
+      .ad-luxe-description {
+        font-size: 0.7rem;
+        max-width: 95%;
+      }
+      .gold-edition {
+        font-size: 0.55rem;
+        margin-top: 12px;
+      }
+      .luxe-divider {
+        margin-top: 8px;
+        width: 40px;
+      }
+    }
+
+    @media (max-width: 500px) {
+      .ad-left {
+        padding: 0.8rem;
+      }
+      .playboy-gold {
+        font-size: 1.8rem;
+        letter-spacing: 2px;
+      }
+      .luxe-sub {
+        font-size: 0.6rem;
+      }
+      .ad-luxe-description {
+        font-size: 0.6rem;
+      }
     }
 
     .ad-left::after {
@@ -184,6 +229,82 @@
       width: 60px;
       height: 2px;
       background: #7f9fcf;
+    }
+
+    /* Стили для модального окна с паролем */
+    .password-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.95);
+      backdrop-filter: blur(12px);
+      z-index: 1000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Playfair Display', 'Didot', serif;
+    }
+
+    .password-modal {
+      background: linear-gradient(135deg, #0b1f3e, #010614);
+      border-radius: 24px;
+      padding: 2rem;
+      text-align: center;
+      border: 1px solid #7f9fcf;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+      max-width: 90%;
+      width: 320px;
+    }
+
+    .password-modal h3 {
+      color: #cde2ff;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      letter-spacing: 2px;
+    }
+
+    .password-modal input {
+      width: 100%;
+      padding: 12px;
+      margin: 1rem 0;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid #5e7ea3;
+      border-radius: 40px;
+      color: #fff;
+      font-size: 1rem;
+      text-align: center;
+      font-family: monospace;
+      outline: none;
+    }
+
+    .password-modal input:focus {
+      border-color: #caa86b;
+    }
+
+    .password-modal button {
+      background: #caa86b;
+      border: none;
+      padding: 10px 24px;
+      border-radius: 40px;
+      font-size: 1rem;
+      font-weight: bold;
+      color: #010614;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'Playfair Display', serif;
+    }
+
+    .password-modal button:hover {
+      background: #e5c48a;
+      transform: scale(0.97);
+    }
+
+    .error-msg {
+      color: #ff8888;
+      font-size: 0.8rem;
+      margin-top: 10px;
     }
 
     .double-spread.flipping-forward, .single-page.flipping-forward, .ad-spread.flipping-forward {
@@ -272,22 +393,24 @@
 
 <script>
   // =================================================================
-  //  ВСЕ 26 РАЗВОРОТОВ ЗАДАНЫ ВРУЧНУЮ — ГАРАНТИРОВАННО БЕЗ ПРОПУСКОВ
+  //  VOGUE ISKAKOVA — ВСЕ 26 РАЗВОРОТОВ ЗАДАНЫ ВРУЧНУЮ
+  //  Рекламная страница (разворот №2) защищена паролем "вааайб"
   // =================================================================
 
   const spreadsData = [
     // 1. Обложка (одиночная, 595x842)
     { type: "single", src: "scans/Титульный лист-последний лист.png", aspectWidth: 595, aspectHeight: 842 },
     
-    // 2. Рекламный разворот (текст + playboy.png)
+    // 2. Рекламный разворот (текст + playboy.png) — ТРЕБУЕТ ПАРОЛЬ "вааайб"
     { 
       type: "ad-spread", 
+      requiresPassword: true,
       leftHtml: `
         <div class="ad-left">
           <div class="playboy-gold">PLAYBOY</div>
           <div class="luxe-sub">THE LUXE ARCHIVE</div>
           <div class="ad-luxe-description">
-            Эксклюзивный выпуск от издательства <strong>PAVEL MEDIA</strong>.<br>
+            Эксклюзивный выпуск от издательства <strong>VOGUE ISKAKOVA</strong>.<br>
             Икона стиля, арт-проекты и гламурная классика.<br>
             Вдохновение для истинных ценителей.
           </div>
@@ -332,6 +455,7 @@
   const totalSpreads = spreadsData.length; // = 26
   let currentSpreadIdx = 0;
   let isAnimating = false;
+  let passwordProtected = false; // флаг для блокировки рекламной страницы
 
   // DOM элементы
   const bookViewport = document.getElementById('bookViewport');
@@ -357,12 +481,87 @@
     bookViewport.style.height = `${targetHeight * scale}px`;
   }
 
+  // Функция показа модального окна с паролем
+  function showPasswordModal(onSuccess) {
+    const overlay = document.createElement('div');
+    overlay.className = 'password-overlay';
+    overlay.innerHTML = `
+      <div class="password-modal">
+        <h3>🔒 ЗАКРЫТЫЙ РАЗВОРОТ</h3>
+        <input type="password" id="passwordInput" placeholder="Введите пароль" autocomplete="off">
+        <button id="submitPassword">ВОЙТИ</button>
+        <div id="passwordError" class="error-msg"></div>
+      </div>
+    `;
+    document.body.appendChild(overlay);
+    
+    const input = overlay.querySelector('#passwordInput');
+    const submitBtn = overlay.querySelector('#submitPassword');
+    const errorDiv = overlay.querySelector('#passwordError');
+    
+    const checkPassword = () => {
+      if (input.value === "вааайб") {
+        overlay.remove();
+        onSuccess();
+      } else {
+        errorDiv.textContent = 'Неверный пароль. Попробуйте снова.';
+        input.value = '';
+        input.focus();
+      }
+    };
+    
+    submitBtn.addEventListener('click', checkPassword);
+    input.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') checkPassword();
+    });
+    input.focus();
+  }
+
   function renderCurrent() {
     if (!wrapper) return;
     wrapper.innerHTML = '';
     const spread = spreadsData[currentSpreadIdx];
     let div;
 
+    // Если это рекламная страница и пароль ещё не введён — показываем заглушку
+    if (spread.requiresPassword && !spread.unlocked) {
+      div = document.createElement('div');
+      div.className = 'single-page';
+      div.style.background = 'radial-gradient(ellipse at 30% 25%, #0b1f3e, #010614)';
+      div.style.display = 'flex';
+      div.style.alignItems = 'center';
+      div.style.justifyContent = 'center';
+      div.style.fontFamily = "'Playfair Display', serif";
+      div.style.color = '#cde2ff';
+      div.style.textAlign = 'center';
+      div.style.padding = '2rem';
+      div.style.flexDirection = 'column';
+      div.style.gap = '1rem';
+      div.innerHTML = `
+        <div style="font-size: 2rem; letter-spacing: 4px;">🔒</div>
+        <div style="font-size: 1.2rem; letter-spacing: 2px;">ЭКСКЛЮЗИВНЫЙ РАЗВОРОТ</div>
+        <div style="font-size: 0.8rem; opacity: 0.8;">Требуется пароль для просмотра</div>
+      `;
+      
+      wrapper.appendChild(div);
+      currentElement = div;
+      
+      const onPageClick = () => {
+        if (isAnimating) return;
+        showPasswordModal(() => {
+          spread.unlocked = true;
+          renderCurrent();
+        });
+      };
+      div.removeEventListener('click', onPageClick);
+      div.addEventListener('click', onPageClick);
+      
+      updateViewportSize();
+      updateIndicator();
+      return;
+    }
+    
+    // Нормальный рендеринг (разблокировано или не требует пароля)
     if (spread.type === 'single') {
       div = document.createElement('div');
       div.className = 'single-page';
@@ -484,8 +683,9 @@
 
   renderCurrent();
 
-  console.log('✨ ЖУРНАЛ ЗАГРУЖЕН (РУЧНОЕ ЗАДАНИЕ — 100% БЕЗ ПРОПУСКОВ) ✨');
-  console.log('📖 Все 26 разворотов перечислены явно, теперь всё работает');
+  console.log('✨ VOGUE ISKAKOVA — ЖУРНАЛ ЗАГРУЖЕН ✨');
+  console.log('📖 Все 26 разворотов перечислены явно');
+  console.log('🔒 Рекламный разворот защищён паролем: "вааайб"');
 </script>
 </body>
 </html>
