@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>VOGUE ISKAKOVA | Премиум журнал — эксклюзивное издание</title>
+  <title>VOGUE ISKAKOVA | Премиум журнал</title>
   <style>
     * {
       margin: 0;
@@ -118,53 +118,61 @@
       align-items: center;
       text-align: center;
       font-family: 'Playfair Display', 'Didot', serif;
-      padding: 1.5rem;
+      padding: 2rem;
       box-sizing: border-box;
       position: relative;
       overflow-y: auto;
     }
 
-    /* Адаптация текста для мобильных устройств */
-    @media (max-width: 800px) {
-      .ad-left {
-        padding: 1rem;
-      }
-      .playboy-gold {
-        font-size: 2.2rem;
-        letter-spacing: 4px;
-      }
-      .luxe-sub {
-        font-size: 0.7rem;
-        letter-spacing: 2px;
-        padding: 0.2rem 0.6rem;
-      }
-      .ad-luxe-description {
-        font-size: 0.7rem;
-        max-width: 95%;
-      }
-      .gold-edition {
-        font-size: 0.55rem;
-        margin-top: 12px;
-      }
-      .luxe-divider {
-        margin-top: 8px;
-        width: 40px;
-      }
-    }
-
-    @media (max-width: 500px) {
+    /* Адаптация текста для мобильных устройств (альбомная ориентация) */
+    @media (max-width: 900px) and (orientation: landscape) {
       .ad-left {
         padding: 0.8rem;
       }
       .playboy-gold {
-        font-size: 1.8rem;
-        letter-spacing: 2px;
+        font-size: 1.8rem !important;
+        letter-spacing: 3px !important;
+        margin: 0.2rem 0 !important;
       }
       .luxe-sub {
-        font-size: 0.6rem;
+        font-size: 0.6rem !important;
+        letter-spacing: 2px !important;
+        padding: 0.2rem 0.5rem !important;
+        margin: 0.4rem 0 !important;
       }
       .ad-luxe-description {
-        font-size: 0.6rem;
+        font-size: 0.55rem !important;
+        line-height: 1.3 !important;
+        max-width: 95% !important;
+        margin-top: 0.4rem !important;
+      }
+      .gold-edition {
+        font-size: 0.5rem !important;
+        margin-top: 8px !important;
+        letter-spacing: 2px !important;
+      }
+      .luxe-divider {
+        margin-top: 6px !important;
+        width: 35px !important;
+      }
+    }
+
+    @media (max-width: 700px) and (orientation: landscape) {
+      .ad-left {
+        padding: 0.5rem;
+      }
+      .playboy-gold {
+        font-size: 1.4rem !important;
+        letter-spacing: 2px !important;
+      }
+      .luxe-sub {
+        font-size: 0.5rem !important;
+      }
+      .ad-luxe-description {
+        font-size: 0.45rem !important;
+      }
+      .gold-edition {
+        font-size: 0.4rem !important;
       }
     }
 
@@ -393,18 +401,20 @@
 
 <script>
   // =================================================================
-  //  VOGUE ISKAKOVA — ВСЕ 26 РАЗВОРОТОВ ЗАДАНЫ ВРУЧНУЮ
-  //  Рекламная страница (разворот №2) защищена паролем "вааайб"
+  //  VOGUE ISKAKOVA — 26 РАЗВОРОТОВ
+  //  Реклама (разворот №2) защищена паролем "вааайб"
+  //  АВТОПОВОРОТ: развороты — альбомный режим, обложка/задняя — портретный
   // =================================================================
 
   const spreadsData = [
-    // 1. Обложка (одиночная, 595x842)
-    { type: "single", src: "scans/Титульный лист-последний лист.png", aspectWidth: 595, aspectHeight: 842 },
+    // 1. Обложка (одиночная, портрет 595x842)
+    { type: "single", src: "scans/Титульный лист-последний лист.png", aspectWidth: 595, aspectHeight: 842, orientation: "portrait" },
     
-    // 2. Рекламный разворот (текст + playboy.png) — ТРЕБУЕТ ПАРОЛЬ "вааайб"
+    // 2. Рекламный разворот (альбомный 1190x842)
     { 
       type: "ad-spread", 
       requiresPassword: true,
+      orientation: "landscape",
       leftHtml: `
         <div class="ad-left">
           <div class="playboy-gold">PLAYBOY</div>
@@ -423,41 +433,39 @@
       aspectHeight: 842
     },
     
-    // 3–26. Целые развороты (1190x842)
-    { type: "double", src: "scans/разворот 0.png", aspectWidth: 1190, aspectHeight: 842 },
-    { type: "double", src: "scans/разворот 1.png", aspectWidth: 1190, aspectHeight: 842 },
-    { type: "double", src: "scans/разворот 2.png", aspectWidth: 1190, aspectHeight: 842 },
-    { type: "double", src: "scans/разворот 3.png", aspectWidth: 1190, aspectHeight: 842 },
-    { type: "double", src: "scans/разворот 4.png", aspectWidth: 1190, aspectHeight: 842 },
-    { type: "double", src: "scans/разворот 5.png", aspectWidth: 1190, aspectHeight: 842 },
-    { type: "double", src: "scans/разворот 6.png", aspectWidth: 1190, aspectHeight: 842 },
-    { type: "double", src: "scans/разворот 7.png", aspectWidth: 1190, aspectHeight: 842 },
-    { type: "double", src: "scans/разворот 8.png", aspectWidth: 1190, aspectHeight: 842 },
-    { type: "double", src: "scans/разворот 9.png", aspectWidth: 1190, aspectHeight: 842 },
-    { type: "double", src: "scans/разворот 10.png", aspectWidth: 1190, aspectHeight: 842 },
-    { type: "double", src: "scans/разворот 11.png", aspectWidth: 1190, aspectHeight: 842 },
-    { type: "double", src: "scans/разворот 12.png", aspectWidth: 1190, aspectHeight: 842 },
-    { type: "double", src: "scans/разворот 13.png", aspectWidth: 1190, aspectHeight: 842 },
-    { type: "double", src: "scans/разворот 14.png", aspectWidth: 1190, aspectHeight: 842 },
-    { type: "double", src: "scans/разворот 15.png", aspectWidth: 1190, aspectHeight: 842 },
-    { type: "double", src: "scans/разворот 16.png", aspectWidth: 1190, aspectHeight: 842 },
-    { type: "double", src: "scans/разворот 17.png", aspectWidth: 1190, aspectHeight: 842 },
-    { type: "double", src: "scans/разворот 18.png", aspectWidth: 1190, aspectHeight: 842 },
-    { type: "double", src: "scans/разворот 19.png", aspectWidth: 1190, aspectHeight: 842 },
-    { type: "double", src: "scans/разворот 20.png", aspectWidth: 1190, aspectHeight: 842 },
-    { type: "double", src: "scans/разворот 21.png", aspectWidth: 1190, aspectHeight: 842 },
-    { type: "double", src: "scans/разворот последний.png", aspectWidth: 1190, aspectHeight: 842 },
+    // 3–25. Целые развороты (альбомные 1190x842)
+    { type: "double", src: "scans/разворот 0.png", aspectWidth: 1190, aspectHeight: 842, orientation: "landscape" },
+    { type: "double", src: "scans/разворот 1.png", aspectWidth: 1190, aspectHeight: 842, orientation: "landscape" },
+    { type: "double", src: "scans/разворот 2.png", aspectWidth: 1190, aspectHeight: 842, orientation: "landscape" },
+    { type: "double", src: "scans/разворот 3.png", aspectWidth: 1190, aspectHeight: 842, orientation: "landscape" },
+    { type: "double", src: "scans/разворот 4.png", aspectWidth: 1190, aspectHeight: 842, orientation: "landscape" },
+    { type: "double", src: "scans/разворот 5.png", aspectWidth: 1190, aspectHeight: 842, orientation: "landscape" },
+    { type: "double", src: "scans/разворот 6.png", aspectWidth: 1190, aspectHeight: 842, orientation: "landscape" },
+    { type: "double", src: "scans/разворот 7.png", aspectWidth: 1190, aspectHeight: 842, orientation: "landscape" },
+    { type: "double", src: "scans/разворот 8.png", aspectWidth: 1190, aspectHeight: 842, orientation: "landscape" },
+    { type: "double", src: "scans/разворот 9.png", aspectWidth: 1190, aspectHeight: 842, orientation: "landscape" },
+    { type: "double", src: "scans/разворот 10.png", aspectWidth: 1190, aspectHeight: 842, orientation: "landscape" },
+    { type: "double", src: "scans/разворот 11.png", aspectWidth: 1190, aspectHeight: 842, orientation: "landscape" },
+    { type: "double", src: "scans/разворот 12.png", aspectWidth: 1190, aspectHeight: 842, orientation: "landscape" },
+    { type: "double", src: "scans/разворот 13.png", aspectWidth: 1190, aspectHeight: 842, orientation: "landscape" },
+    { type: "double", src: "scans/разворот 14.png", aspectWidth: 1190, aspectHeight: 842, orientation: "landscape" },
+    { type: "double", src: "scans/разворот 15.png", aspectWidth: 1190, aspectHeight: 842, orientation: "landscape" },
+    { type: "double", src: "scans/разворот 16.png", aspectWidth: 1190, aspectHeight: 842, orientation: "landscape" },
+    { type: "double", src: "scans/разворот 17.png", aspectWidth: 1190, aspectHeight: 842, orientation: "landscape" },
+    { type: "double", src: "scans/разворот 18.png", aspectWidth: 1190, aspectHeight: 842, orientation: "landscape" },
+    { type: "double", src: "scans/разворот 19.png", aspectWidth: 1190, aspectHeight: 842, orientation: "landscape" },
+    { type: "double", src: "scans/разворот 20.png", aspectWidth: 1190, aspectHeight: 842, orientation: "landscape" },
+    { type: "double", src: "scans/разворот 21.png", aspectWidth: 1190, aspectHeight: 842, orientation: "landscape" },
+    { type: "double", src: "scans/разворот последний.png", aspectWidth: 1190, aspectHeight: 842, orientation: "landscape" },
     
-    // 26. Задняя обложка (одиночная, 595x842)
-    { type: "single", src: "scans/последний лист.png", aspectWidth: 595, aspectHeight: 842 }
+    // 26. Задняя обложка (одиночная, портрет 595x842)
+    { type: "single", src: "scans/последний лист.png", aspectWidth: 595, aspectHeight: 842, orientation: "portrait" }
   ];
 
-  const totalSpreads = spreadsData.length; // = 26
+  const totalSpreads = spreadsData.length;
   let currentSpreadIdx = 0;
   let isAnimating = false;
-  let passwordProtected = false; // флаг для блокировки рекламной страницы
 
-  // DOM элементы
   const bookViewport = document.getElementById('bookViewport');
   const wrapper = document.getElementById('pagesWrapper');
   const prevBtn = document.getElementById('prevBtn');
@@ -466,11 +474,26 @@
 
   let currentElement = null;
 
+  // Функция определения оптимального размера с учётом ориентации
   function updateViewportSize() {
     if (!bookViewport) return;
     const spread = spreadsData[currentSpreadIdx];
-    const targetWidth = spread.aspectWidth;
-    const targetHeight = spread.aspectHeight;
+    let targetWidth = spread.aspectWidth;
+    let targetHeight = spread.aspectHeight;
+    
+    // Если на мобильном устройстве и страница портретная, а экран в альбоме — подстраиваем
+    const isMobile = window.innerWidth <= 900;
+    const isLandscapeScreen = window.innerWidth > window.innerHeight;
+    
+    if (isMobile && spread.orientation === "portrait" && isLandscapeScreen) {
+      // Для портретной страницы на альбомном экране — уменьшаем масштаб, чтобы влезла по высоте
+      const flipbookRect = document.getElementById('flipbook').getBoundingClientRect();
+      const maxHeight = flipbookRect.height - 4;
+      const scale = maxHeight / targetHeight;
+      targetWidth = targetWidth * scale;
+      targetHeight = maxHeight;
+    }
+    
     const flipbookRect = document.getElementById('flipbook').getBoundingClientRect();
     const maxHeight = flipbookRect.height - 4;
     const maxWidth = window.innerWidth - 60;
@@ -481,7 +504,6 @@
     bookViewport.style.height = `${targetHeight * scale}px`;
   }
 
-  // Функция показа модального окна с паролем
   function showPasswordModal(onSuccess) {
     const overlay = document.createElement('div');
     overlay.className = 'password-overlay';
@@ -489,7 +511,7 @@
       <div class="password-modal">
         <h3>🔒 ЗАКРЫТЫЙ РАЗВОРОТ</h3>
         <input type="password" id="passwordInput" placeholder="Введите пароль" autocomplete="off">
-        <button id="submitPassword">ВОЙТИ</button>
+        <button id="submitPassword">РАЗБЛОКИРОВАТЬ</button>
         <div id="passwordError" class="error-msg"></div>
       </div>
     `;
@@ -523,7 +545,6 @@
     const spread = spreadsData[currentSpreadIdx];
     let div;
 
-    // Если это рекламная страница и пароль ещё не введён — показываем заглушку
     if (spread.requiresPassword && !spread.unlocked) {
       div = document.createElement('div');
       div.className = 'single-page';
@@ -540,18 +561,32 @@
       div.innerHTML = `
         <div style="font-size: 2rem; letter-spacing: 4px;">🔒</div>
         <div style="font-size: 1.2rem; letter-spacing: 2px;">ЭКСКЛЮЗИВНЫЙ РАЗВОРОТ</div>
-        <div style="font-size: 0.8rem; opacity: 0.8;">Требуется пароль для просмотра</div>
+        <div style="font-size: 0.8rem; opacity: 0.8; margin-top: 0.5rem;">Для просмотра введите пароль</div>
+        <button id="unlockBtn" style="background: #caa86b; border: none; padding: 8px 20px; border-radius: 40px; margin-top: 1rem; font-family: inherit; font-weight: bold; cursor: pointer;">РАЗБЛОКИРОВАТЬ</button>
       `;
       
       wrapper.appendChild(div);
       currentElement = div;
       
-      const onPageClick = () => {
-        if (isAnimating) return;
-        showPasswordModal(() => {
-          spread.unlocked = true;
-          renderCurrent();
+      const unlockBtn = div.querySelector('#unlockBtn');
+      if (unlockBtn) {
+        unlockBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          showPasswordModal(() => {
+            spread.unlocked = true;
+            renderCurrent();
+          });
         });
+      }
+      
+      const onPageClick = (e) => {
+        e.stopPropagation();
+        if (isAnimating) return;
+        const rect = div.getBoundingClientRect();
+        const clickX = e.clientX - rect.left;
+        const isLeftHalf = clickX < rect.width / 2;
+        if (isLeftHalf && currentSpreadIdx > 0) flipToPrev();
+        else if (!isLeftHalf && currentSpreadIdx < totalSpreads - 1) flipToNext();
       };
       div.removeEventListener('click', onPageClick);
       div.addEventListener('click', onPageClick);
@@ -561,7 +596,6 @@
       return;
     }
     
-    // Нормальный рендеринг (разблокировано или не требует пароля)
     if (spread.type === 'single') {
       div = document.createElement('div');
       div.className = 'single-page';
@@ -680,11 +714,12 @@
     else if (e.key === 'ArrowRight') { e.preventDefault(); nextHandler(); }
   });
   window.addEventListener('resize', () => updateViewportSize());
+  window.addEventListener('orientationchange', () => setTimeout(updateViewportSize, 50));
 
   renderCurrent();
 
   console.log('✨ VOGUE ISKAKOVA — ЖУРНАЛ ЗАГРУЖЕН ✨');
-  console.log('📖 Все 26 разворотов перечислены явно');
+  console.log('📱 Мобильная версия: развороты в альбомном режиме, обложка/задняя — в портретном');
   console.log('🔒 Рекламный разворот защищён паролем: "вааайб"');
 </script>
 </body>
